@@ -8,6 +8,7 @@ import { ConfigType } from '@nestjs/config';
 import config from '../config';
 import { HttpService } from '@nestjs/axios';
 import { MetricsService } from '../metrics/metrics.service';
+import { ExportToCsv } from 'export-to-csv';
 
 @Injectable()
 export class TribeService {
@@ -72,6 +73,26 @@ export class TribeService {
     return { repositories };
   }
 
+  async findRepositoriesCsv(id: number) {
+    const tribe = await this.findOne(id);
+    const repositories = await this.findRepositories(id);
+    const options = {
+      fieldSeparator: ',',
+      quoteStrings: '"',
+      decimalSeparator: '.',
+      showLabels: true,
+      showTitle: false,
+      title: tribe.name,
+      useTextFile: false,
+      useBom: true,
+      useKeysAsHeaders: true,
+    };
+
+    const csvExporter = new ExportToCsv(options);
+    const csvData = csvExporter.generateCsv(repositories.repositories, true);
+    return { file: csvData, name: tribe.name };
+  }
+
   async update(id: number, updateTribeDto: UpdateTribeDto) {
     const tribe = await this.findOne(id);
     this.tribeProvider.merge(tribe, updateTribeDto);
@@ -91,7 +112,6 @@ export class TribeService {
   }
 
   async getStatus(arrayState = [], vulnerabilities: number) {
-    console.log(arrayState, 'Array State');
     let state = {};
     let item: number;
     if (vulnerabilities > 0) {

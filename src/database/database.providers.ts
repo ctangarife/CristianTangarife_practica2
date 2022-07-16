@@ -17,7 +17,7 @@ export const databaseProviders = [
         synchronize: false,
         migrationsRun: false,
         migrationsTableName: 'migration',
-        logging: true,
+        logging: false,
       });
 
       return dataSource.initialize();

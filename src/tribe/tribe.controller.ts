@@ -7,6 +7,7 @@ import {
   Delete,
   ParseIntPipe,
   Put,
+  Res,
 } from '@nestjs/common';
 import { TribeService } from './tribe.service';
 import { CreateTribeDto } from './dto/create-tribe.dto';
@@ -36,6 +37,22 @@ export class TribeController {
   @Get(':id/repositories')
   findRepositories(@Param('id', ParseIntPipe) id: number) {
     return this.tribeService.findRepositories(id);
+  }
+
+  @Get(':id/repositories/csv')
+  async findRepositoriesCsv(@Res() res, @Param('id', ParseIntPipe) id: number) {
+    res.set('Content-Type', 'text/csv');
+    return await this.tribeService
+      .findRepositoriesCsv(id)
+      .then((resp) => {
+        res.set(
+          'Content-Disposition',
+          `attachment; filename="${resp.name}.csv"`,
+        );
+
+        res.send(resp.file);
+      })
+      .catch((err) => console.error(err, 'Error al generar el archivo'));
   }
 
   @Put(':id')
