@@ -1,4 +1,6 @@
+import { Metrics } from '../../metrics/interface/metrics.interface';
 import { CommonProperties } from '../../commoms/common.interface';
+import { Tribe } from '../../tribe/interface/tribe.interface';
 
 export enum State {
   ENABLED = 'E',
@@ -15,4 +17,8 @@ export interface Repositories extends CommonProperties {
   name: string;
   state: State;
   status: Status;
+
+  //Relaciones
+  tribe: Tribe;
+  //metric: Metrics;
 }
