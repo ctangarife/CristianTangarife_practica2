@@ -20,13 +20,14 @@ export class RepositoriesService {
   }
 
   async findOne(id: number) {
-    const repository = await this.repositoryProvided.findOne({
+    let repository = await this.repositoryProvided.findOne({
       where: { id: id },
       relations: ['tribe', 'metric'],
     });
     if (!repository) {
       throw new NotFoundException(`Repository #${id} not found`);
     }
+    repository = await this.afterFindOne(repository);
     return repository;
   }
 
@@ -40,4 +41,44 @@ export class RepositoriesService {
     await this.findOne(id);
     return this.repositoryProvided.delete(id);
   }
+
+  mapState = ({ find = 'E', reverse = false } = {}) => {
+    const state = {
+      E: 'ENABLED',
+      D: 'DISABLED',
+      A: 'ARCHIVED',
+    };
+    if (reverse) {
+      const stateReverse = (Object.keys(state) as (keyof typeof state)[]).find(
+        (key) => {
+          return state[key] === find;
+        },
+      );
+      return stateReverse;
+    }
+
+    return state[find];
+  };
+  mapStatus = async ({ find = 'A', reverse = false } = {}) => {
+    const status = {
+      A: 'ACTIVE ',
+      I: 'INACTIVE ',
+    };
+    if (reverse) {
+      const statusReverse = (
+        Object.keys(status) as (keyof typeof status)[]
+      ).find((key) => {
+        return status[key] === find;
+      });
+      return statusReverse;
+    }
+
+    return status[find];
+  };
+
+  afterFindOne = async (result: any) => {
+    result.state = await this.mapState({ find: result.state });
+    result.status = await this.mapStatus({ find: result.status });
+    return result;
+  };
 }

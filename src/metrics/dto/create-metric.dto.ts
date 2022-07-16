@@ -1,11 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty, IsNumber, IsPositive, Min } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsPositive,
+  Max,
+  Min,
+} from 'class-validator';
 import { CreateRepositoryDto } from '../../repositories/dto/create-repository.dto';
 
 export class CreateMetricDto {
   @IsNumber({ maxDecimalPlaces: 3 })
   @IsNotEmpty()
   @Min(0)
+  @Max(1)
   @ApiProperty()
   coverage: number;
   @IsNumber()

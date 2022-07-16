@@ -6,5 +6,6 @@ import { repositoryProviders } from './entities/repository.provider';
 @Module({
   controllers: [RepositoriesController],
   providers: [RepositoriesService, ...repositoryProviders],
+  exports: [RepositoriesService],
 })
 export class RepositoriesModule {}

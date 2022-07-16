@@ -33,6 +33,11 @@ export class TribeController {
     return this.tribeService.findOne(id);
   }
 
+  @Get(':id/repositories')
+  findRepositories(@Param('id', ParseIntPipe) id: number) {
+    return this.tribeService.findRepositories(id);
+  }
+
   @Put(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
