@@ -1,26 +1,41 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Repository } from 'typeorm';
 import { CreateMetricDto } from './dto/create-metric.dto';
 import { UpdateMetricDto } from './dto/update-metric.dto';
+import { MetricEntity } from './entities/metric.entity';
 
 @Injectable()
 export class MetricsService {
-  create(createMetricDto: CreateMetricDto) {
+  constructor(
+    @Inject('METRICS_PROVIDED')
+    private metricProvided: Repository<MetricEntity>,
+  ) {}
+  async create(createMetricDto: CreateMetricDto) {
     return 'This action adds a new metric';
   }
 
-  findAll() {
-    return `This action returns all metrics`;
+  async findAll(): Promise<MetricEntity[]> {
+    return this.metricProvided.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} metric`;
+  async findOne(id: number) {
+    const metric = this.metricProvided.findOneBy({ id: id });
+    if (!metric) {
+      throw new NotFoundException(
+        `Metrics identificate with #${id} is not found`,
+      );
+    }
+    return metric;
   }
 
-  update(id: number, updateMetricDto: UpdateMetricDto) {
-    return `This action updates a #${id} metric`;
+  async update(id: number, updateMetricDto: UpdateMetricDto) {
+    const metric = await this.findOne(id);
+    this.metricProvided.merge(metric, updateMetricDto);
+    return this.metricProvided.save(metric);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} metric`;
+  async remove(id: number) {
+    await this.findOne(id);
+    return this.metricProvided.delete(id);
   }
 }

@@ -3,7 +3,7 @@ import { RepositoryEntity } from './repository.entity';
 
 export const repositoryProviders = [
   {
-    provide: 'REPOSITORY_REPOSITORY',
+    provide: 'REPOSITORY_PROVIDER',
     useFactory: (dataSource: DataSource) =>
       dataSource.getRepository(RepositoryEntity),
     inject: ['DATA_SOURCE'],

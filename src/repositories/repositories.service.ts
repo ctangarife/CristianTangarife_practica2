@@ -1,26 +1,40 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Repository } from 'typeorm';
 import { CreateRepositoryDto } from './dto/create-repository.dto';
 import { UpdateRepositoryDto } from './dto/update-repository.dto';
+import { RepositoryEntity } from './entities/repository.entity';
 
 @Injectable()
 export class RepositoriesService {
-  create(createRepositoryDto: CreateRepositoryDto) {
-    return 'This action adds a new repository';
+  constructor(
+    @Inject('REPOSITORY_PROVIDER')
+    private repositoryProvided: Repository<RepositoryEntity>,
+  ) {}
+  async create(createRepositoryDto: CreateRepositoryDto) {
+    const newRepository = this.repositoryProvided.create(createRepositoryDto);
+    return this.repositoryProvided.save(newRepository);
   }
 
-  findAll() {
-    return `This action returns all repositories`;
+  async findAll(): Promise<RepositoryEntity[]> {
+    return this.repositoryProvided.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} repository`;
+  async findOne(id: number) {
+    const repository = await this.repositoryProvided.findOneBy({ id: id });
+    if (!repository) {
+      throw new NotFoundException(`Repository #${id} not found`);
+    }
+    return repository;
   }
 
-  update(id: number, updateRepositoryDto: UpdateRepositoryDto) {
-    return `This action updates a #${id} repository`;
+  async update(id: number, updateRepositoryDto: UpdateRepositoryDto) {
+    const repository = await this.findOne(id);
+    this.repositoryProvided.merge(repository, updateRepositoryDto);
+    return this.repositoryProvided.save(repository);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} repository`;
+  async remove(id: number) {
+    const repository = await this.findOne(id);
+    return this.repositoryProvided.delete(id);
   }
 }

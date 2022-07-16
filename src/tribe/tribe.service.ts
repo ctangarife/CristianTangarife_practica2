@@ -1,26 +1,39 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Repository } from 'typeorm';
 import { CreateTribeDto } from './dto/create-tribe.dto';
 import { UpdateTribeDto } from './dto/update-tribe.dto';
+import { TribeEntity } from './entities/tribe.entity';
 
 @Injectable()
 export class TribeService {
-  create(createTribeDto: CreateTribeDto) {
-    return 'This action adds a new tribe';
+  constructor(
+    @Inject('TRIBE_REPOSITORY') private tribeProvider: Repository<TribeEntity>,
+  ) {}
+  async create(createTribeDto: CreateTribeDto) {
+    const newTribe = this.tribeProvider.create(createTribeDto);
+    return this.tribeProvider.save(newTribe);
   }
 
-  findAll() {
-    return `This action returns all tribe`;
+  async findAll(): Promise<TribeEntity[]> {
+    return this.tribeProvider.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tribe`;
+  async findOne(id: number) {
+    const tribe = await this.tribeProvider.findOneBy({ id: id });
+    if (!tribe) {
+      throw new NotFoundException(`Tribe #${id} not found`);
+    }
+    return tribe;
   }
 
-  update(id: number, updateTribeDto: UpdateTribeDto) {
-    return `This action updates a #${id} tribe`;
+  async update(id: number, updateTribeDto: UpdateTribeDto) {
+    const tribe = await this.findOne(id);
+    this.tribeProvider.merge(tribe, updateTribeDto);
+    return this.tribeProvider.save(tribe);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} tribe`;
+  async remove(id: number) {
+    await this.findOne(id);
+    return this.tribeProvider.delete(id);
   }
 }
