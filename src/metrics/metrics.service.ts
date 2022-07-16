@@ -16,11 +16,14 @@ export class MetricsService {
   }
 
   async findAll(): Promise<MetricEntity[]> {
-    return this.metricProvided.find();
+    return this.metricProvided.find({ relations: ['repository'] });
   }
 
   async findOne(id: number) {
-    const metric = this.metricProvided.findOneBy({ id: id });
+    const metric = this.metricProvided.findOne({
+      where: { id: id },
+      relations: ['repository'],
+    });
     if (!metric) {
       throw new NotFoundException(
         `Metrics identificate with #${id} is not found`,
