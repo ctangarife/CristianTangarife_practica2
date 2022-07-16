@@ -1,31 +1,35 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
+import { IsInt, IsNotEmpty, IsNumber, IsPositive, Min } from 'class-validator';
 import { CreateRepositoryDto } from '../../repositories/dto/create-repository.dto';
 
 export class CreateMetricDto {
-  @IsNumber()
+  @IsNumber({ maxDecimalPlaces: 3 })
   @IsNotEmpty()
-  @IsPositive()
+  @Min(0)
   @ApiProperty()
   coverage: number;
   @IsNumber()
   @IsNotEmpty()
-  @IsPositive()
+  @IsInt()
+  @Min(0)
   @ApiProperty()
   bugs: number;
   @IsNumber()
   @IsNotEmpty()
-  @IsPositive()
+  @IsInt()
+  @Min(0)
   @ApiProperty()
   vulnerabilitis: number;
   @IsNumber()
   @IsNotEmpty()
-  @IsPositive()
+  @IsInt()
+  @Min(0)
   @ApiProperty()
   hotspot: number;
   @IsNumber()
   @IsNotEmpty()
-  @IsPositive()
+  @IsInt()
+  @Min(0)
   @ApiProperty()
   code_smells: number;
   @IsPositive()

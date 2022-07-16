@@ -8,21 +8,21 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CommonColumn } from '../../commoms/commom.columns';
-import { Metrics } from '../interface/metrics.intergace';
+import { Metrics } from '../interface/metrics.interface';
 
 @Entity('metrics')
 export class MetricEntity extends CommonColumn implements Metrics {
   @PrimaryGeneratedColumn()
   id: number;
-  @Column('double precision')
+  @Column('double precision', { nullable: false, default: 0 })
   coverage: number;
-  @Column('int')
+  @Column('int', { nullable: false, default: 0 })
   bugs: number;
-  @Column('int')
+  @Column('int', { nullable: false, default: 0 })
   vulnerabilities: number;
-  @Column('int')
+  @Column('int', { nullable: false, default: 0 })
   hotspot: number;
-  @Column('int')
+  @Column('int', { nullable: false, default: 0 })
   code_smells: number;
   @OneToOne(() => RepositoryEntity, (repo) => repo.metric)
   @JoinColumn([{ name: 'id_repository', referencedColumnName: 'id' }])
