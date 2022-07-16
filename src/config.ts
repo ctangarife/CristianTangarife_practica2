@@ -12,5 +12,6 @@ export default registerAs('config', () => {
       user: process.env.DATABASE_USER,
       host: process.env.DATABASE_HOST,
     },
+    url: process.env.URL_MOCK,
   };
 });

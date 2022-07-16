@@ -20,6 +20,7 @@ import config from './config';
       validationSchema: Joi.object({
         DATABASE_URL: Joi.string().required(),
         DATABASE_EXTRA: Joi.string().required(),
+        URL_MOCK: Joi.string().required(),
       }),
     }),
     OrganizationsModule,

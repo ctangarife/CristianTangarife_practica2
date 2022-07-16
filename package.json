@@ -26,6 +26,7 @@
     "migrations:revert": "npm run typeorm migration:revert"
   },
   "dependencies": {
+    "@nestjs/axios": "^0.1.0",
     "@nestjs/class-validator": "^0.13.1",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",

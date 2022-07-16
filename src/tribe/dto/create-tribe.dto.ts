@@ -15,3 +15,10 @@ export class CreateTribeDto {
   @IsPositive()
   organization: CreateOrganizationDto;
 }
+
+export class VerificationState {
+  @IsNumber()
+  id: number;
+  @IsNumber()
+  state: number;
+}
