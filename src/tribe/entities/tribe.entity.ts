@@ -19,7 +19,9 @@ export class TribeEntity extends CommonColumn implements Tribe {
   name: string;
   @Column({ type: 'int' })
   status: number;
-  @ManyToOne(() => OrganizationEntity)
+  @ManyToOne(() => OrganizationEntity, (organization) => organization.tribe, {
+    eager: true,
+  })
   @JoinColumn([{ name: 'id_organization', referencedColumnName: 'id' }])
   organization: OrganizationEntity;
   @OneToMany(() => RepositoryEntity, (repository) => repository.tribe)

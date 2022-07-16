@@ -7,6 +7,6 @@ export interface Tribe extends CommonProperties {
   status: number;
 
   //Relaciones
-  organization?: Organization;
+  organization: Organization;
   repositories?: Repositories[];
 }

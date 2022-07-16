@@ -16,11 +16,14 @@ export class RepositoriesService {
   }
 
   async findAll(): Promise<RepositoryEntity[]> {
-    return this.repositoryProvided.find();
+    return this.repositoryProvided.find({ relations: ['tribe'] });
   }
 
   async findOne(id: number) {
-    const repository = await this.repositoryProvided.findOneBy({ id: id });
+    const repository = await this.repositoryProvided.findOne({
+      where: { id: id },
+      relations: ['tribe'],
+    });
     if (!repository) {
       throw new NotFoundException(`Repository #${id} not found`);
     }

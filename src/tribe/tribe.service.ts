@@ -15,11 +15,14 @@ export class TribeService {
   }
 
   async findAll(): Promise<TribeEntity[]> {
-    return this.tribeProvider.find();
+    return this.tribeProvider.find({ relations: ['organization'] });
   }
 
   async findOne(id: number) {
-    const tribe = await this.tribeProvider.findOneBy({ id: id });
+    const tribe = await this.tribeProvider.findOne({
+      where: { id: id },
+      relations: ['organization'],
+    });
     if (!tribe) {
       throw new NotFoundException(`La Tribu no se encuentra registrada`);
     }

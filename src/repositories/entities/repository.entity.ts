@@ -25,10 +25,9 @@ export class RepositoryEntity extends CommonColumn implements Repositories {
   state: State;
   @Column({ type: 'varchar', enum: Status, default: Status.ACTIVE, length: 1 })
   status: Status;
-  @ManyToOne(() => TribeEntity)
+  @ManyToOne(() => TribeEntity, (tribe) => tribe.repositories, { eager: true })
   @JoinColumn([{ name: 'id_tribe', referencedColumnName: 'id' }])
   tribe: TribeEntity;
   @OneToOne(() => MetricEntity)
-  @JoinColumn([{ name: 'id_metrics', referencedColumnName: 'id' }])
   metric: MetricEntity;
 }

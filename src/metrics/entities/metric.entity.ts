@@ -23,7 +23,7 @@ export class MetricEntity extends CommonColumn implements Metrics {
   hotspot: number;
   @Column('int')
   code_smells: number;
-  @OneToOne(() => RepositoryEntity)
+  @OneToOne(() => RepositoryEntity, (repo) => repo.metric)
   @JoinColumn([{ name: 'id_repository', referencedColumnName: 'id' }])
   repository: RepositoryEntity;
 }

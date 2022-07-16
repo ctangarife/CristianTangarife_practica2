@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsPositive, IsString } from 'class-validator';
+import { CreateOrganizationDto } from '../../organizations/dto/create-organization.dto';
 
 export class CreateTribeDto {
   @IsString()
@@ -10,4 +11,7 @@ export class CreateTribeDto {
   @IsPositive()
   @ApiProperty()
   status: number;
+  @IsNumber()
+  @IsPositive()
+  organization: CreateOrganizationDto;
 }

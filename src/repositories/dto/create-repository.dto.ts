@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsPositive, IsString } from 'class-validator';
 import { Status, State } from '../interface/repositories.interface';
+import { CreateTribeDto } from '../../tribe/dto/create-tribe.dto';
 
 export class CreateRepositoryDto {
   @IsString()
@@ -14,4 +15,7 @@ export class CreateRepositoryDto {
   @ApiProperty()
   @ApiProperty({ enum: Status, default: Status.ACTIVE })
   status: Status;
+  @IsPositive()
+  @IsNotEmpty()
+  tribe: CreateTribeDto;
 }
