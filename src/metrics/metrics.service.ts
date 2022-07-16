@@ -11,7 +11,8 @@ export class MetricsService {
     private metricProvided: Repository<MetricEntity>,
   ) {}
   async create(createMetricDto: CreateMetricDto) {
-    return 'This action adds a new metric';
+    const newMetric = this.metricProvided.create(createMetricDto);
+    return this.metricProvided.save(newMetric);
   }
 
   async findAll(): Promise<MetricEntity[]> {
