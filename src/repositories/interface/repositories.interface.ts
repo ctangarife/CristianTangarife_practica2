@@ -1,4 +1,3 @@
-import { Metrics } from '../../metrics/interface/metrics.intergace';
 import { CommonProperties } from '../../commoms/common.interface';
 import { Tribe } from '../../tribe/interface/tribe.interface';
 
