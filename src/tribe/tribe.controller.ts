@@ -14,7 +14,7 @@ import { UpdateTribeDto } from './dto/update-tribe.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('tribe')
-@Controller('tribe')
+@Controller('tribes')
 export class TribeController {
   constructor(private readonly tribeService: TribeService) {}
 
