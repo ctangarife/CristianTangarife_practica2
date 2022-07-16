@@ -16,13 +16,13 @@ export class RepositoriesService {
   }
 
   async findAll(): Promise<RepositoryEntity[]> {
-    return this.repositoryProvided.find({ relations: ['tribe'] });
+    return this.repositoryProvided.find({ relations: ['tribe', 'metric'] });
   }
 
   async findOne(id: number) {
     const repository = await this.repositoryProvided.findOne({
       where: { id: id },
-      relations: ['tribe'],
+      relations: ['tribe', 'metric'],
     });
     if (!repository) {
       throw new NotFoundException(`Repository #${id} not found`);
@@ -37,7 +37,7 @@ export class RepositoriesService {
   }
 
   async remove(id: number) {
-    const repository = await this.findOne(id);
+    await this.findOne(id);
     return this.repositoryProvided.delete(id);
   }
 }

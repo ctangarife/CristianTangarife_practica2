@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { TribeEntity } from '../../tribe/entities/tribe.entity';
 import {
   Column,
@@ -28,6 +29,7 @@ export class RepositoryEntity extends CommonColumn implements Repositories {
   @ManyToOne(() => TribeEntity, (tribe) => tribe.repositories, { eager: true })
   @JoinColumn([{ name: 'id_tribe', referencedColumnName: 'id' }])
   tribe: TribeEntity;
-  @OneToOne(() => MetricEntity)
+  @OneToOne(() => MetricEntity, (metric) => metric.repository)
+  @JoinColumn()
   metric: MetricEntity;
 }

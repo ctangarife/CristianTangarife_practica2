@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
+import { CreateRepositoryDto } from '../../repositories/dto/create-repository.dto';
 
 export class CreateMetricDto {
   @IsNumber()
@@ -27,4 +28,7 @@ export class CreateMetricDto {
   @IsPositive()
   @ApiProperty()
   code_smells: number;
+  @IsPositive()
+  @IsNotEmpty()
+  repository: CreateRepositoryDto;
 }

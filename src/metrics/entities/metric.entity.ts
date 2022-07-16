@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { RepositoryEntity } from '../../repositories/entities/repository.entity';
 import {
   Column,

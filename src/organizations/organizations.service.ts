@@ -18,12 +18,13 @@ export class OrganizationsService {
   }
 
   async findAll(): Promise<OrganizationEntity[]> {
-    return this.organizationRepository.find();
+    return this.organizationRepository.find({ relations: ['tribe'] });
   }
 
   async findOne(id: number) {
-    const organization = await this.organizationRepository.findOneBy({
-      id: id,
+    const organization = await this.organizationRepository.findOne({
+      where: { id: id },
+      relations: ['tribe'],
     });
     if (!organization) {
       throw new NotFoundException(`organization #${id} not found`);
