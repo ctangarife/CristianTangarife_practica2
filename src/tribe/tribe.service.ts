@@ -21,7 +21,7 @@ export class TribeService {
   async findOne(id: number) {
     const tribe = await this.tribeProvider.findOneBy({ id: id });
     if (!tribe) {
-      throw new NotFoundException(`Tribe #${id} not found`);
+      throw new NotFoundException(`La Tribu no se encuentra registrada`);
     }
     return tribe;
   }
