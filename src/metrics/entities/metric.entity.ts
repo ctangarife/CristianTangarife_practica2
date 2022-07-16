@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CommonColumn } from '../../commoms/commom.columns';
-import { Metrics } from '../interface/metrics.interface';
+import { Metrics } from '../interface/metrics.intergace';
 
 @Entity('metrics')
 export class MetricEntity extends CommonColumn implements Metrics {

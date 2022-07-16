@@ -8,7 +8,7 @@ export class OrganizationEntity extends CommonColumn implements Organization {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 500 })
+  @Column({ length: 50 })
   name: string;
 
   @Column('int')

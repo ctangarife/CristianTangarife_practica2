@@ -1,4 +1,4 @@
-import { Metrics } from '../../metrics/interface/metrics.interface';
+import { Metrics } from '../../metrics/interface/metrics.intergace';
 import { CommonProperties } from '../../commoms/common.interface';
 import { Tribe } from '../../tribe/interface/tribe.interface';
 
@@ -20,5 +20,4 @@ export interface Repositories extends CommonProperties {
 
   //Relaciones
   tribe: Tribe;
-  //metric: Metrics;
 }

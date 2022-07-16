@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CommonColumn } from '../../commoms/commom.columns';
@@ -12,6 +13,7 @@ import {
   State,
   Status,
 } from '../interface/repositories.interface';
+import { MetricEntity } from '../../metrics/entities/metric.entity';
 
 @Entity('repository')
 export class RepositoryEntity extends CommonColumn implements Repositories {
@@ -26,4 +28,7 @@ export class RepositoryEntity extends CommonColumn implements Repositories {
   @ManyToOne(() => TribeEntity)
   @JoinColumn([{ name: 'id_tribe', referencedColumnName: 'id' }])
   tribe: TribeEntity;
+  @OneToOne(() => MetricEntity)
+  @JoinColumn([{ name: 'id_metrics', referencedColumnName: 'id' }])
+  metric: MetricEntity;
 }
