@@ -1,24 +1,20 @@
-import {
-  HttpException,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { RepositoriesService } from '../repositories/repositories.service';
 import { Repository } from 'typeorm';
-import { CreateTribeDto, VerificationState } from './dto/create-tribe.dto';
+import { CreateTribeDto } from './dto/create-tribe.dto';
 import { UpdateTribeDto } from './dto/update-tribe.dto';
 import { TribeEntity } from './entities/tribe.entity';
 import { ConfigType } from '@nestjs/config';
 import config from '../config';
 import { HttpService } from '@nestjs/axios';
-import axios, { AxiosResponse } from 'axios';
+import { MetricsService } from '../metrics/metrics.service';
 
 @Injectable()
 export class TribeService {
   constructor(
     @Inject('TRIBE_REPOSITORY') private tribeProvider: Repository<TribeEntity>,
     private repositoryService: RepositoriesService,
+    private metricsService: MetricsService,
     @Inject(config.KEY) private configService: ConfigType<typeof config>,
     private readonly httpService: HttpService,
   ) {}
@@ -53,23 +49,27 @@ export class TribeService {
     const repositories = await Promise.all(
       tribe.repositories.map(async (rp) => {
         rp = await this.repositoryService.afterFindOne(rp);
-        const statusVerify = await this.getStatus(verificationState, 1);
+        const metricsData = await this.metricsService.findByRepository(rp.id);
+        const statusVerify = await this.getStatus(
+          verificationState,
+          metricsData.vulnerabilities,
+        );
         return {
           id: rp.id, // identificador del repositorio
           name: rp.name, // nombre del repositorio
           tribe: tribe.name, // nombre de la tribu
           organization: tribe.organization.name, // nombre de la organización
-          coverage: '35%', // cobertura de pruebas unitarias
-          codeSmells: 0,
-          bugs: 0,
-          vulnerabilities: 0,
-          hotspots: 0,
+          coverage: this.toPercenage(metricsData.coverage), // cobertura de pruebas unitarias
+          codeSmells: metricsData.code_smells,
+          bugs: metricsData.bugs,
+          vulnerabilities: metricsData.vulnerabilities,
+          hotspots: metricsData.hotspot,
           verificationState: statusVerify['state'], // Estado de verificación (Mock)
           state: rp.state, // Estado del repositorio (state)
         };
       }),
     );
-    return repositories;
+    return { repositories };
   }
 
   async update(id: number, updateTribeDto: UpdateTribeDto) {
@@ -104,5 +104,9 @@ export class TribeService {
     state = arrayState[item];
 
     return state;
+  }
+
+  toPercenage(num: number) {
+    return `${Math.round(num * 100)}%`;
   }
 }

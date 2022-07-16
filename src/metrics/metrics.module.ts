@@ -6,5 +6,6 @@ import { metricsProvider } from './entities/metrics.provider';
 @Module({
   controllers: [MetricsController],
   providers: [MetricsService, ...metricsProvider],
+  exports: [MetricsService],
 })
 export class MetricsModule {}

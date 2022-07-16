@@ -31,6 +31,15 @@ export class MetricsService {
     }
     return metric;
   }
+  async findByRepository(id: number) {
+    const metric = this.metricProvided.findOne({
+      where: { repository: { id: id } },
+    });
+    if (!metric) {
+      throw new NotFoundException(`Repository #${id} is not found`);
+    }
+    return metric;
+  }
 
   async update(id: number, updateMetricDto: UpdateMetricDto) {
     const metric = await this.findOne(id);
